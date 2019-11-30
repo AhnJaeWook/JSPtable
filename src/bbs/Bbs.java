@@ -7,7 +7,14 @@ public class Bbs {
 	private String bbsDate;
 	private String bbsContent;
 	private int bbsAvailable;
+	private int idOrder;
 	
+	public int getInOrder() {
+		return idOrder;
+	}
+	public void setInOrder(int idOrder) {
+		this.idOrder = idOrder;
+	}
 	public int getBbsID() {
 		return bbsID;
 	}

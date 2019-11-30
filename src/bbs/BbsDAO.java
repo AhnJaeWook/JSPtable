@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class BbsDAO {
 	private Connection conn; // 데이터베이스를 연결하기위해 사용
 	private ResultSet rs; // 결과값을 도출하기위해 사용
+	private ResultSet rss;
 	
 	public BbsDAO() { //Mysql에 접속을 하게해주는 부분
 		try {
@@ -45,6 +46,19 @@ public class BbsDAO {
 				return rs.getInt(1) + 1;
 			}
 			return 1;  // 첫번째 게시물 일경우
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; // 데이터베이스 오류
+	}
+	
+	public int getImage() { // 게시물 갯수 리턴
+		String SQL = "SELECT bbsID FROM BBS ORDER BY bbsID DESC";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			
+			return rs.getInt(1);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -109,10 +123,14 @@ public class BbsDAO {
 	
 	public Bbs getBbs(int bbsID) { // 게시물 작성자와 유저가 동일한지 확인용
 		String SQL = "SELECT * FROM BBS WHERE bbsID = ?";
+		//String ORD = "SELECT bbsID FROM BBS ORDER BY bbsID DESC";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			// PreparedStatement pstm = conn.prepareStatement(ORD);
 			pstmt.setInt(1, bbsID);
+			//pstm.setInt(1, bbsID);
 			rs = pstmt.executeQuery();
+			//rss = pstm.executeQuery();
 			if (rs.next()) {
 				Bbs bbs = new Bbs();
 				bbs.setBbsID(rs.getInt(1));
@@ -121,6 +139,7 @@ public class BbsDAO {
 				bbs.setBbsDate(rs.getString(4));
 				bbs.setBbsContent(rs.getString(5));
 				bbs.setBbsAvailable(rs.getInt(6));
+				//bbs.setInOrder(rss.getInt(1));
 				return bbs;
 			} 
 		} catch(Exception e) {

@@ -23,18 +23,17 @@ public class UserDAO {
 	}
 	
 	public int login(String userID, String userPassword) {
-		String SQL = "SELECT userPassword FROM USER WHERE userID = ?"; //?는 아래 prepareStatement로 처리하기위해 사용
+		String SQL = "SELECT * FROM USER WHERE userID = ?"; //?는 아래 prepareStatement로 처리하기위해 사용
+		
 		try {
 			pstmt = conn.prepareStatement(SQL); // SQL대입
 			pstmt.setString(1, userID); // 
+			
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				if(rs.getString(1).equals(userPassword))
-					return 1;
-				else
-					return 0;
-			}
-			return -1;
+	
+			  if(rs.next()) { if(rs.getString(1).equals(userPassword)) return 1; else
+			  return 0; } return -1;
+			 
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
